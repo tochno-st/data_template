@@ -1,0 +1,227 @@
+# Стандартый шаблон проекта Если быть точным
+
+Шаблон [Cookiecutter](https://github.com/cookiecutter/cookiecutter) для проектов Если быть точным с автоматическим созданием виртуального окружения и установкой пакетов.
+
+## Возможности
+
+- Стандартизированная структура проекта
+- Автоматическое создание виртуального окружения (`.venv`)
+- Умное определение пакетного менеджера: использует [uv](https://github.com/astral-sh/uv) при наличии, иначе pip
+- Готовность к работе с Jupyter notebooks — `ipykernel` включён по умолчанию
+- Возмодность установить нужные пакеты в виртуальное окружение на этапе создания папки
+
+## Требования
+
+- Python 3.7+
+- [Cookiecutter](https://github.com/cookiecutter/cookiecutter)
+
+### Установка Cookiecutter
+
+#### macOS
+
+```bash
+# Через Homebrew (рекомендуется)
+brew install cookiecutter
+
+# Или через pip
+pip install cookiecutter
+```
+
+#### Linux (Ubuntu)
+
+```bash
+# Через apt
+sudo apt install cookiecutter
+
+# Или через pip
+pip install cookiecutter
+```
+
+#### Windows
+
+```powershell
+# Через pip
+pip install cookiecutter
+```
+
+> **Примечание:** На Windows рекомендуется использовать PowerShell или Windows Terminal.
+
+## Использование
+
+### Стандартный способ
+
+```bash
+cookiecutter /путь/к/data_template
+```
+
+### Настройка быстрого алиаса
+
+Добавьте алиас в конфигурацию вашей оболочки для быстрого доступа.
+
+**Для Zsh (`~/.zshrc`):**
+```bash
+alias tbtemp='cookiecutter /путь/к/data_template'
+```
+
+**Для Bash (`~/.bashrc`):**
+```bash
+alias tbtemp='cookiecutter /путь/к/data_template'
+```
+
+Замените `/путь/к/data_template` на актуальный путь к директории шаблона.
+
+Перезагрузите конфигурацию оболочки:
+```bash
+source ~/.zshrc  # для Zsh
+source ~/.bashrc # для Bash
+```
+
+Теперь создавайте новые проекты мгновенно:
+```bash
+tbtemp
+```
+
+## Структура проекта
+
+Сгенерированные проекты имеют следующую структуру:
+
+```
+имя_проекта/
+├── .gitignore          # Gitignore для Python/data science
+├── .venv/              # Виртуальное окружение (создаётся автоматически)
+├── README.md           # Описание проекта
+├── data/
+│   ├── external/       # Данные из сторонних источников
+│   ├── interim/        # Промежуточные преобразованные данные
+│   ├── processed/      # Финальные данные для анализа
+│   └── raw/            # Исходные неизменяемые данные
+├── notebooks/          # Jupyter notebooks
+├── reports/            # Сгенерированные отчёты, графики, документация
+└── src/
+    └── __init__.py     # Python-пакет с исходным кодом
+```
+
+### Назначение директорий
+
+| Директория | Назначение |
+|------------|------------|
+| `data/raw` | Исходные файлы данных. **Никогда не изменяйте** — считайте неизменяемыми |
+| `data/interim` | Промежуточные данные, прошедшие трансформацию |
+| `data/processed` | Финальные, канонические наборы данных для анализа или моделирования |
+| `data/external` | Данные из сторонних источников |
+| `notebooks` | Jupyter notebooks для исследования и анализа |
+| `reports` | Сгенерированные отчёты, графики и документация |
+| `src` | Переиспользуемый Python-код, модули и скрипты |
+
+## Переменные шаблона
+
+При создании нового проекта вам будет предложено ввести следующие значения:
+
+| Переменная | Описание | По умолчанию |
+|------------|----------|--------------|
+| `directory_name` | Название папки проекта | `gather_data` |
+| `author_name` | Ваше имя или название организации | - |
+| `description` | Краткое описание проекта | - |
+| `python_packages` | Пакеты для установки через пробел | `ipykernel pandas matplotlib` |
+
+### Пример
+
+```
+$ tbtemp
+directory_name [gather_data]: my_analysis
+author_name [Your name]: Иван Иванов
+description [A short description]: Анализ данных продаж Q4 2024
+python_packages [ipykernel pandas matplotlib]: ipykernel pandas numpy scikit-learn seaborn
+```
+
+## После генерации
+
+После создания проекта шаблон автоматически:
+
+1. Создает виртуальное окружение `.venv`
+2. Устанавливает указанные Python-пакеты
+3. Выводит инструкции по активации
+
+### Активация окружения
+
+```bash
+# Linux/macOS
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
+```
+
+### Приоритет пакетных менеджеров
+
+Шаблон использует следующий приоритет для установки пакетов:
+
+1. **uv** (если установлен) — сверхбыстрый пакетный менеджер на Rust
+2. **pip** (запасной вариант) — стандартный пакетный менеджер Python
+
+Для ускорения создания проектов установите [uv](https://github.com/astral-sh/uv):
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+## Использование с Jupyter Hub
+
+Если вы работаете в Jupyter Hub и не имеете доступа к терминалу на локальной машине, выполните следующие шаги:
+
+### 1. Откройте терминал в Jupyter Hub
+
+В интерфейсе Jupyter Hub: **File → New → Terminal**
+
+### 2. Установите cookiecutter (если не установлен)
+
+```bash
+pip install --user cookiecutter
+```
+
+### 3. Склонируйте шаблон
+
+```bash
+git clone <url-репозитория-шаблона> ~/data_template
+```
+
+### 4. Создайте проект
+
+```bash
+cookiecutter ~/data_template
+```
+
+### 5. Подключите ядро к Jupyter Hub
+
+После создания проекта перейдите в его директорию и зарегистрируйте виртуальное окружение как ядро Jupyter:
+
+```bash
+cd имя_проекта
+source .venv/bin/activate
+python -m ipykernel install --user --name=имя_проекта --display-name="Python (имя_проекта)"
+```
+
+Теперь в Jupyter Hub при создании нового notebook можно выбрать ядро **"Python (имя_проекта)"** с установленными пакетами.
+
+### Удаление ядра
+
+Если ядро больше не нужно:
+
+```bash
+jupyter kernelspec uninstall имя_проекта
+```
+
+## Кастомизация
+
+### Изменение пакетов по умолчанию
+
+Отредактируйте `cookiecutter.json` для изменения пакетов по умолчанию:
+
+```json
+{
+    "python_packages": "ipykernel pandas numpy matplotlib seaborn"
+}
+```
+
+### Добавление новых директорий
+
+Отредактируйте шаблон в `{{cookiecutter.directory_name}}/` для добавления новых папок или файлов во все генерируемые проекты.
